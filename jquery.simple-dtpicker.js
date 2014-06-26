@@ -24,7 +24,7 @@
 			format: 'DD.MM.YYYY hh:mm',
 			prevMonth: 'Luna precedentă',
 			nextMonth: 'Luna următoare',
-			today: 'Azi'		
+			today: 'Azi'
 		},
 
 		ja: {
@@ -54,7 +54,12 @@
 		de: {
 			days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
 			months: [ "Jan", "Feb", "März", "Apr", "Mai", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dez" ],
+			sep: '.',
 			format: 'DD.MM.YYYY hh:mm',
+			prevMonth: 'Vorheriger Monat',
+			nextMonth: 'Nächster Monat',
+			today: 'Heute',
+			selectTime: 'Wähle Uhrzeit'
 		},
 		sv: {
 			days: ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'],
@@ -125,7 +130,7 @@
 		}
 	};
 	/* ----- */
-	
+
 	/**
 		PickerHandler Object
 	**/
@@ -133,7 +138,7 @@
 		this.$pickerObject = $picker;
 		this.$inputObject = $input;
 	};
-	
+
 	/* Get a picker */
 	PickerHandler.prototype.getPicker = function(){
 		return this.$pickerObject;
@@ -208,7 +213,7 @@
 	PickerHandler.prototype._relocate = function(){
 		var $picker = this.$pickerObject;
 		var $input = this.$inputObject;
-		
+
 		if ($input != null && $picker.data('isInline') === false) { // Float mode
 			// Move position of a picker - vertical
 			var input_outer_height = $input.outerHeight({'margin': true});
@@ -219,7 +224,7 @@
 			if (!isObj('Number', picker_outer_height)) {
 				picker_outer_height = $picker.outerHeight();
 			}
-			
+
 			// Set width to assure date and time are side by side
 			if($(".datepicker_calendar", $picker).width() !== 0 && $(".datepicker_timelist", $picker).width() !== 0){
 				$picker.parent().width($(".datepicker_calendar", $picker).width() + $(".datepicker_timelist", $picker).width() + 6);
@@ -291,7 +296,7 @@
 		var todayDate = new Date();
 		var isCurrentYear = todayDate.getFullYear() == date.getFullYear();
 		var isCurrentMonth = isCurrentYear && todayDate.getMonth() == date.getMonth();
-		
+
 		if (!isCurrentMonth || !$picker.data("futureOnly")) {
 			if (targetMonth_lastDay < date.getDate()) {
 				date.setDate(targetMonth_lastDay);
@@ -341,7 +346,7 @@
 		}
 		return format; // Return date-format
 	};
-	
+
 	var normalizeYear = function (year) {
 		if (year < 99) { // change year for 4 digits
 			var date = new Date();
@@ -443,7 +448,7 @@
 				}
 			}
 		}
-		
+
 		// Parse date & time with common format
 		re = /^(\d{2,4})[-\/](\d{1,2})[-\/](\d{1,2}) (\d{1,2}):(\d{1,2})$/;
 		m = re.exec(str);
@@ -459,7 +464,7 @@
 				date = new Date(m[1], m[2] - 1, m[3]);
 			}
 		}
-		
+
 		if(isNaN(date) === false && isNaN(date.getDate()) === false){ // Parse successful
 			return date;
 		}
@@ -501,8 +506,8 @@
 		var date = getPickedDate($picker);
 		var locale = $picker.data("locale");
 		var format = getDateFormat($picker.data("dateFormat"), locale, $picker.data('dateOnly'));
-		
-		var old = $inp.val();                        
+
+		var old = $inp.val();
 		$inp.val(getFormattedDate(date, format));
 		if (old != $inp.val()) { // only trigger if it actually changed to avoid a nasty loop condition
 			$inp.trigger("change");
@@ -565,7 +570,7 @@
 		if (allowWdays == null || isObj('Array', allowWdays) === false || allowWdays.length <= 0) {
 			allowWdays = null;
 		}
-		
+
 		var minTime = $picker.data("minTime");
 		var maxTime = $picker.data("maxTime");
 
@@ -659,8 +664,8 @@
 		if ((!isFutureOnly || !isCurrentMonth) && ((minDate == null) || (minDate < cDate.getTime()))
 		) {
 			$link_before_month = $('<a>');
-			$link_before_month.text('‹');
-			$link_before_month.addClass('icon-previous-month');
+			// $link_before_month.text('‹');
+			$link_before_month.addClass('icon-previous-month fa fa-angle-left');
 			$link_before_month.prop('alt', translate(locale,'prevMonth'));
 			$link_before_month.prop('title', translate(locale,'prevMonth') );
 			$link_before_month.click(function() {
@@ -684,8 +689,8 @@
 		var $link_next_month = null;
 		if ((maxDate == null) || (maxDate > cDate.getTime())) {
 			$link_next_month = $('<a>');
-			$link_next_month.text('›');
-			$link_next_month.addClass('icon-next-month');
+			// $link_next_month.text('›');
+			$link_next_month.addClass('icon-next-month fa fa-angle-right');
 			$link_next_month.prop('alt', translate(locale,'nextMonth'));
 			$link_next_month.prop('title', translate(locale,'nextMonth'));
 			$link_next_month.click(function() {
@@ -700,8 +705,8 @@
 				http://fortawesome.github.io/Font-Awesome/license/
 				Thankyou.
 			*/
-			$link_today.html( decodeURIComponent('%3c%3fxml%20version%3d%221%2e0%22%20encoding%3d%22UTF%2d8%22%20standalone%3d%22no%22%3f%3e%3csvg%20%20xmlns%3adc%3d%22http%3a%2f%2fpurl%2eorg%2fdc%2felements%2f1%2e1%2f%22%20%20xmlns%3acc%3d%22http%3a%2f%2fcreativecommons%2eorg%2fns%23%22%20xmlns%3ardf%3d%22http%3a%2f%2fwww%2ew3%2eorg%2f1999%2f02%2f22%2drdf%2dsyntax%2dns%23%22%20%20xmlns%3asvg%3d%22http%3a%2f%2fwww%2ew3%2eorg%2f2000%2fsvg%22%20xmlns%3d%22http%3a%2f%2fwww%2ew3%2eorg%2f2000%2fsvg%22%20%20version%3d%221%2e1%22%20%20width%3d%22100%25%22%20%20height%3d%22100%25%22%20viewBox%3d%220%200%2010%2010%22%3e%3cg%20transform%3d%22translate%28%2d5%2e5772299%2c%2d26%2e54581%29%22%3e%3cpath%20d%3d%22m%2014%2e149807%2c31%2e130932%20c%200%2c%2d0%2e01241%200%2c%2d0%2e02481%20%2d0%2e0062%2c%2d0%2e03721%20L%2010%2e57723%2c28%2e153784%207%2e0108528%2c31%2e093719%20c%200%2c0%2e01241%20%2d0%2e0062%2c0%2e02481%20%2d0%2e0062%2c0%2e03721%20l%200%2c2%2e97715%20c%200%2c0%2e217084%200%2e1798696%2c0%2e396953%200%2e3969534%2c0%2e396953%20l%202%2e3817196%2c0%200%2c%2d2%2e38172%201%2e5878132%2c0%200%2c2%2e38172%202%2e381719%2c0%20c%200%2e217084%2c0%200%2e396953%2c%2d0%2e179869%200%2e396953%2c%2d0%2e396953%20l%200%2c%2d2%2e97715%20m%201%2e383134%2c%2d0%2e427964%20c%200%2e06823%2c%2d0%2e08063%200%2e05582%2c%2d0%2e210882%20%2d0%2e02481%2c%2d0%2e279108%20l%20%2d1%2e358324%2c%2d1%2e128837%200%2c%2d2%2e530576%20c%200%2c%2d0%2e111643%20%2d0%2e08683%2c%2d0%2e198477%20%2d0%2e198477%2c%2d0%2e198477%20l%20%2d1%2e190859%2c0%20c%20%2d0%2e111643%2c0%20%2d0%2e198477%2c0%2e08683%20%2d0%2e198477%2c0%2e198477%20l%200%2c1%2e209467%20%2d1%2e513384%2c%2d1%2e265289%20c%20%2d0%2e2605%2c%2d0%2e217083%20%2d0%2e682264%2c%2d0%2e217083%20%2d0%2e942764%2c0%20L%205%2e6463253%2c30%2e42386%20c%20%2d0%2e080631%2c0%2e06823%20%2d0%2e093036%2c0%2e198476%20%2d0%2e024809%2c0%2e279108%20l%200%2e3845485%2c0%2e458976%20c%200%2e031012%2c0%2e03721%200%2e080631%2c0%2e06203%200%2e1302503%2c0%2e06823%200%2e055821%2c0%2e0062%200%2e1054407%2c%2d0%2e01241%200%2e1488574%2c%2d0%2e04342%20l%204%2e2920565%2c%2d3%2e578782%204%2e292058%2c3%2e578782%20c%200%2e03721%2c0%2e03101%200%2e08063%2c0%2e04342%200%2e13025%2c0%2e04342%200%2e0062%2c0%200%2e01241%2c0%200%2e01861%2c0%200%2e04962%2c%2d0%2e0062%200%2e09924%2c%2d0%2e03101%200%2e130251%2c%2d0%2e06823%20l%200%2e384549%2c%2d0%2e458976%22%20%2f%3e%3c%2fg%3e%3c%2fsvg%3e') );
-			$link_today.addClass('icon-home');
+			// $link_today.html( decodeURIComponent('%3c%3fxml%20version%3d%221%2e0%22%20encoding%3d%22UTF%2d8%22%20standalone%3d%22no%22%3f%3e%3csvg%20%20xmlns%3adc%3d%22http%3a%2f%2fpurl%2eorg%2fdc%2felements%2f1%2e1%2f%22%20%20xmlns%3acc%3d%22http%3a%2f%2fcreativecommons%2eorg%2fns%23%22%20xmlns%3ardf%3d%22http%3a%2f%2fwww%2ew3%2eorg%2f1999%2f02%2f22%2drdf%2dsyntax%2dns%23%22%20%20xmlns%3asvg%3d%22http%3a%2f%2fwww%2ew3%2eorg%2f2000%2fsvg%22%20xmlns%3d%22http%3a%2f%2fwww%2ew3%2eorg%2f2000%2fsvg%22%20%20version%3d%221%2e1%22%20%20width%3d%22100%25%22%20%20height%3d%22100%25%22%20viewBox%3d%220%200%2010%2010%22%3e%3cg%20transform%3d%22translate%28%2d5%2e5772299%2c%2d26%2e54581%29%22%3e%3cpath%20d%3d%22m%2014%2e149807%2c31%2e130932%20c%200%2c%2d0%2e01241%200%2c%2d0%2e02481%20%2d0%2e0062%2c%2d0%2e03721%20L%2010%2e57723%2c28%2e153784%207%2e0108528%2c31%2e093719%20c%200%2c0%2e01241%20%2d0%2e0062%2c0%2e02481%20%2d0%2e0062%2c0%2e03721%20l%200%2c2%2e97715%20c%200%2c0%2e217084%200%2e1798696%2c0%2e396953%200%2e3969534%2c0%2e396953%20l%202%2e3817196%2c0%200%2c%2d2%2e38172%201%2e5878132%2c0%200%2c2%2e38172%202%2e381719%2c0%20c%200%2e217084%2c0%200%2e396953%2c%2d0%2e179869%200%2e396953%2c%2d0%2e396953%20l%200%2c%2d2%2e97715%20m%201%2e383134%2c%2d0%2e427964%20c%200%2e06823%2c%2d0%2e08063%200%2e05582%2c%2d0%2e210882%20%2d0%2e02481%2c%2d0%2e279108%20l%20%2d1%2e358324%2c%2d1%2e128837%200%2c%2d2%2e530576%20c%200%2c%2d0%2e111643%20%2d0%2e08683%2c%2d0%2e198477%20%2d0%2e198477%2c%2d0%2e198477%20l%20%2d1%2e190859%2c0%20c%20%2d0%2e111643%2c0%20%2d0%2e198477%2c0%2e08683%20%2d0%2e198477%2c0%2e198477%20l%200%2c1%2e209467%20%2d1%2e513384%2c%2d1%2e265289%20c%20%2d0%2e2605%2c%2d0%2e217083%20%2d0%2e682264%2c%2d0%2e217083%20%2d0%2e942764%2c0%20L%205%2e6463253%2c30%2e42386%20c%20%2d0%2e080631%2c0%2e06823%20%2d0%2e093036%2c0%2e198476%20%2d0%2e024809%2c0%2e279108%20l%200%2e3845485%2c0%2e458976%20c%200%2e031012%2c0%2e03721%200%2e080631%2c0%2e06203%200%2e1302503%2c0%2e06823%200%2e055821%2c0%2e0062%200%2e1054407%2c%2d0%2e01241%200%2e1488574%2c%2d0%2e04342%20l%204%2e2920565%2c%2d3%2e578782%204%2e292058%2c3%2e578782%20c%200%2e03721%2c0%2e03101%200%2e08063%2c0%2e04342%200%2e13025%2c0%2e04342%200%2e0062%2c0%200%2e01241%2c0%200%2e01861%2c0%200%2e04962%2c%2d0%2e0062%200%2e09924%2c%2d0%2e03101%200%2e130251%2c%2d0%2e06823%20l%200%2e384549%2c%2d0%2e458976%22%20%2f%3e%3c%2fg%3e%3c%2fsvg%3e') );
+			$link_today.addClass('icon-home fa fa-home');
 			$link_today.prop('alt', translate(locale,'today'));
 			$link_today.prop('title', translate(locale,'today'));
 			$link_today.click(function() {
@@ -784,7 +789,7 @@
 				$td.text(realDay - lastDay);
 				$td.addClass('day_another_month');
 				$td.data("dateStr", dateNextMonth.getFullYear() + "/" + (dateNextMonth.getMonth() + 1) + "/" + (realDay - lastDay));
-				realDayObj.setDate( realDay - lastDay );  
+				realDayObj.setDate( realDay - lastDay );
 				realDayObj.setMonth( dateNextMonth.getMonth() );
 				realDayObj.setYear( dateNextMonth.getFullYear() );
 			}
@@ -815,7 +820,7 @@
 			realDayObjMN.setHours(23);
 			realDayObjMN.setMinutes(59);
 			realDayObjMN.setSeconds(59);
-				
+
 			if (
 				// compare to 23:59:59 on the current day (if MIN is 1pm, then we still need to show this day
 				((minDate != null) && (minDate > realDayObjMN.getTime())) || ((maxDate != null) && (maxDate < realDayObj.getTime())) // compare to 00:00:00
@@ -842,7 +847,7 @@
 							// Close a picker
 							ActivePickerId = -1;
 							$picker.hide();
-						}					
+						}
 				});
 
 				$td.hover(function() {
@@ -858,7 +863,7 @@
 
 			/* ---- */
 		}
-		
+
 		if ($picker.data("dateOnly") === true) {
 			/* dateOnly mode */
 			$select_time_caption.css("display", "none");
@@ -884,7 +889,7 @@
 				var $o = $('<div>');
 				var is_past_time = hour_ < todayDate.getHours() || (hour_ == todayDate.getHours() && min_ < todayDate.getMinutes());
 				var is_past = isCurrentDay && is_past_time;
-				
+
 				$o.addClass('timelist_item');
 				var oText = "";
 				if($picker.data("amPmInTimeList")){
@@ -943,7 +948,7 @@
 						}
 					});
 				}
-				
+
 				if (hour_ == date.getHours() && min_ == date.getMinutes()) { /* selected time */
 					$o.addClass('active');
 					timelist_activeTimeCell_offsetTop = $o.offset().top;
@@ -954,7 +959,7 @@
 					min_ = min_ - 60;
 					hour_++;
 				}
-				
+
 			}
 
 			/* Scroll the timelist */
@@ -966,7 +971,7 @@
 				$timelist.scrollTop(drawBefore_timeList_scrollTop);
 			}
 		}
-		
+
 		/* Fade-in animation */
 		if (isAnim === true) {
 			if(changePoint == "calendar"){
@@ -1032,13 +1037,13 @@
 		$picker.data('onHide', opt.onHide);
 		$picker.data('onInit', opt.onInit);
 		$picker.data('allowWdays', opt.allowWdays);
-		
+
 		if(opt.amPmInTimeList === true){
 			$picker.data('amPmInTimeList', true);
 		} else {
 			$picker.data('amPmInTimeList', false);
 		}
-    
+
 		var minDate = Date.parse(opt.minDate);
 		if (isNaN(minDate)) { // invalid date?
 			$picker.data('minDate', null); // set to null
@@ -1059,18 +1064,18 @@
 		} else {
 			$picker.data("minuteInterval", 30);
 		}
-			opt.minTime = opt.minTime.split(':');	
+			opt.minTime = opt.minTime.split(':');
 			opt.maxTime = opt.maxTime.split(':');
 
 		if(! ((opt.minTime[0] >= 0 ) && (opt.minTime[0] <24 ))){
 			opt.minTime[0]="00";
-		}	
+		}
 		if(! ((opt.maxTime[0] >= 0 ) && (opt.maxTime[0] <24 ))){
 			opt.maxTime[0]="23";
 		}
 		if(! ((opt.minTime[1] >= 0 ) && (opt.minTime[1] <60 ))){
 			opt.minTime[1]="00";
-		}	
+		}
 		if(! ((opt.maxTime[1] >= 0 ) && (opt.maxTime[1] <24 ))){
 			opt.maxTime[1]="59";
 		}
@@ -1080,7 +1085,7 @@
 		opt.maxTime[1]=parseInt(opt.maxTime[1]);
 		$picker.data('minTime', opt.minTime);
 		$picker.data('maxTime', opt.maxTime);
-		
+
 		/* Header */
 		var $header = $('<div>');
 		$header.addClass('datepicker_header');
@@ -1116,7 +1121,7 @@
 			if (window.sidebar) { // Mozilla Firefox
 				$calendar.bind('DOMMouseScroll', function(e){ // Change a month with mouse wheel scroll for Fx
 					var $picker = getParentPickerObject($(this));
-					
+
 					// up,left [delta < 0] down,right [delta > 0]
 					var delta = e.originalEvent.detail;
 					/*
@@ -1160,7 +1165,7 @@
 			"isOutputToInputObject": opt.autodateOnStart
 		}, opt.current);
 	};
-	
+
 	var getDefaults = function() {
 		return {
 			"current": null,
@@ -1186,14 +1191,14 @@
 			"amPmInTimeList": false
 		};
 	};
-	
+
 	/**
 	 * Initialize dtpicker
 	 */
 	 $.fn.dtpicker = function(config) {
 		var date = new Date();
 		var defaults = getDefaults();
-		
+
 		defaults.inputObjectId = undefined;
 		var options = $.extend(defaults, config);
 
@@ -1208,7 +1213,7 @@
 	 $.fn.appendDtpicker = function(config) {
 		var date = new Date();
 		var defaults = getDefaults();
-		
+
 		defaults.inline = false;
 		var options = $.extend(defaults, config);
 
@@ -1235,7 +1240,7 @@
 			/* Make parent-div for picker */
 			var $d = $('<div>');
 			if(options.inline){ // Inline mode
-				$d.insertAfter(input);	
+				$d.insertAfter(input);
 			} else { // Float mode
 				$d.css("position","absolute");
 				$('body').append($d);
@@ -1293,7 +1298,7 @@
 
 				/* Hide this picker */
 				$picker.hide();
-				
+
 				/* Set onClick event handler for input-field */
 				$(input).on('click, focus',function(){
 					var $input = $(this);
@@ -1397,7 +1402,7 @@
 		}
 	};
 
-	$.fn.handleDtpicker = function( method ) { 
+	$.fn.handleDtpicker = function( method ) {
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 		} else if ( typeof method === 'object' || ! method ) {
@@ -1420,7 +1425,7 @@
 			}
 		}
   	};
-	
+
 	/* Set event handler to Body element, for hide a floated-picker */
 	$(function(){
 		$('body').click(function(){
