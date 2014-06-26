@@ -14,7 +14,8 @@
 			format: 'YYYY-MM-DD hh:mm',
 			prevMonth: 'Previous month',
 			nextMonth: 'Next month',
-			today: 'Today'
+			today: 'Today',
+			selectTime: 'Select time'
 		},
 		ro:{
 			days: ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm'],
@@ -53,7 +54,7 @@
 		de: {
 			days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
 			months: [ "Jan", "Feb", "März", "Apr", "Mai", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dez" ],
-			format: 'DD.MM.YYYY hh:mm'
+			format: 'DD.MM.YYYY hh:mm',
 		},
 		sv: {
 			days: ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'],
@@ -658,7 +659,8 @@
 		if ((!isFutureOnly || !isCurrentMonth) && ((minDate == null) || (minDate < cDate.getTime()))
 		) {
 			$link_before_month = $('<a>');
-			$link_before_month.text('<');
+			$link_before_month.text('‹');
+			$link_before_month.addClass('icon-previous-month');
 			$link_before_month.prop('alt', translate(locale,'prevMonth'));
 			$link_before_month.prop('title', translate(locale,'prevMonth') );
 			$link_before_month.click(function() {
@@ -676,12 +678,14 @@
 		cDate.setMonth(date.getMonth() + 1);
 
 		var $now_month = $('<span>');
+		$now_month.addClass('current-month');
 		$now_month.text(date.getFullYear() + " " + translate(locale, 'sep') + " " + translate(locale, 'months')[date.getMonth()]);
 
 		var $link_next_month = null;
 		if ((maxDate == null) || (maxDate > cDate.getTime())) {
 			$link_next_month = $('<a>');
-			$link_next_month.text('>');
+			$link_next_month.text('›');
+			$link_next_month.addClass('icon-next-month');
 			$link_next_month.prop('alt', translate(locale,'nextMonth'));
 			$link_next_month.prop('title', translate(locale,'nextMonth'));
 			$link_next_month.click(function() {
@@ -710,6 +714,15 @@
 			$header.append($link_before_month);
 		}
 		$header.append($now_month);
+
+		$select_time_caption = $('<span>');
+		$select_time_caption.text(translate(locale,'selectTime'));
+		$select_time_caption.addClass('select-time-caption');
+		$select_time_caption.prop('alt', translate(locale,'selectTime'));
+		$select_time_caption.prop('title', translate(locale,'selectTime'));
+		$header.append($select_time_caption);
+
+
 		if ($link_next_month != null) {
 			$header.append($link_next_month);
 		}
@@ -848,6 +861,7 @@
 		
 		if ($picker.data("dateOnly") === true) {
 			/* dateOnly mode */
+			$select_time_caption.css("display", "none");
 			$timelist.css("display", "none");
 		} else {
 			/* Timelist ----- */
