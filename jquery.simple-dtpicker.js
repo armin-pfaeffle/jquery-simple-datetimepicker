@@ -54,7 +54,7 @@
 		de: {
 			days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
 			months: [ "Jan", "Feb", "März", "Apr", "Mai", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dez" ],
-			sep: '.',
+			sep: '-',
 			format: 'DD.MM.YYYY hh:mm',
 			prevMonth: 'Vorheriger Monat',
 			nextMonth: 'Nächster Monat',
@@ -227,7 +227,7 @@
 
 			// Set width to assure date and time are side by side
 			if($(".datepicker_calendar", $picker).width() !== 0 && $(".datepicker_timelist", $picker).width() !== 0){
-				$picker.parent().width($(".datepicker_calendar", $picker).width() + $(".datepicker_timelist", $picker).width() + 6);
+				$picker.parent().width($(".datepicker_calendar", $picker).outerWidth() + $(".datepicker_timelist", $picker).outerWidth() + 6);
 			}
 			if(parseInt($(window).height()) <=  ($input.offset().top - $(document).scrollTop() + input_outer_height + picker_outer_height) ){
 				// Display to top of an input-field
@@ -723,10 +723,7 @@
 		$select_time_caption = $('<span>');
 		$select_time_caption.text(translate(locale,'selectTime'));
 		$select_time_caption.addClass('select-time-caption');
-		$select_time_caption.prop('alt', translate(locale,'selectTime'));
-		$select_time_caption.prop('title', translate(locale,'selectTime'));
 		$header.append($select_time_caption);
-
 
 		if ($link_next_month != null) {
 			$header.append($link_next_month);
@@ -872,13 +869,14 @@
 			/* Timelist ----- */
 			$timelist.children().remove();
 
-			/* Set height to Timelist (Calendar innerHeight - Calendar padding) */
-			if ($calendar.innerHeight() > 0) {
-				$timelist.css("height", $calendar.innerHeight() - 10 + 'px');
-			}
-
 			realDayObj =  new Date(date.getTime());
-			$timelist.css("height", $calendar.innerHeight() - 10 + 'px');
+
+			var timelistPadding = $timelist.outerHeight() - $timelist.height();
+			/* Don't know why, but setting the height of $calendar explicitly fixes a FF and IE
+			   problem where the height of calender and timelist are not equal */
+			$calendar.css("height", $table.outerHeight());
+			var timelistPadding = $timelist.outerHeight() - $timelist.height();
+			$timelist.css("height", $calendar.outerHeight() - timelistPadding);
 
 			/* Output time cells */
 			var hour_ = minTime[0];
