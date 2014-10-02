@@ -122,7 +122,9 @@
 			background-color: #fff;
 			}
 
-			.datepicker > .datepicker_inner_container > .datepicker_calendar > table {
+			.datepicker > .datepicker_inner_container > .datepicker_calendar > .datepicker_table {
+				border-spacing: 0;
+				border-collapse: collapse;
 				}
 
 				/*
